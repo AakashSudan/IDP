@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .match {
+            color: green;
+        }
+        .mismatch {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-Time Document Validation</h1>
+        <form id="validationForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter Name" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="text" id="dob" name="dob" placeholder="Enter Date of Birth" required>
+            </div>
+            <div class="form-group">
+                <label for="fathers_name">Father's Name</label>
+                <input type="text" id="fathers_name" name="fathers_name" placeholder="Enter Father's Name" required>
+            </div>
+            <div class="form-group">
+                <label for="id_number">ID Number</label>
+                <input type="text" id="id_number" name="id_number" placeholder="Enter ID Number" required>
+            </div>
+            <div class="form-group">
+                <label for="file">Upload File</label>
+                <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.pdf" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Validate</button>
+            </div>
+        </form>
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById("validationForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = new FormData();
+            formData.append("name", document.getElementById("name").value);
+            formData.append("dob", document.getElementById("dob").value);
+            formData.append("fathers_name", document.getElementById("fathers_name").value);
+            formData.append("id_number", document.getElementById("id_number").value);
+            formData.append("file", document.getElementById("file").files[0]);
+
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "<p>Processing... Please wait.</p>";
+
+            try {
+                // Send request to API
+                const response = await fetch("http://127.0.0.1:8000/realtime/", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                // Display results
+                resultsDiv.innerHTML = ""; // Clear previous results
+                if (response.ok) {
+                    resultsDiv.innerHTML += `<h3>Extracted Text:</h3><pre>${result.extracted_text}</pre>`;
+                    resultsDiv.innerHTML += `<h3>Validation Results:</h3>`;
+                    result.results.forEach(res => {
+                        const statusClass = res.status.includes("Match") ? "match" : "mismatch";
+                        resultsDiv.innerHTML += `<p class="${statusClass}">${res.field}: ${res.value} (${res.status})</p>`;
+                    });
+                } else {
+                    resultsDiv.innerHTML = `<p class="mismatch">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="mismatch">An error occurred: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
