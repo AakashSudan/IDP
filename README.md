@@ -40,10 +40,6 @@ venv\Scripts\activate     # For Windows
 
 ### 3️⃣ Install Dependencies
 ```sh
-pip install -r requirements.txt
-```
-**OR Install Manually:**
-```sh
 pip install fastapi uvicorn paddleocr opencv-python numpy pandas fuzzywuzzy python-Levenshtein
 ```
 
