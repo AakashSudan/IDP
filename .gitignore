@@ -1,0 +1,12 @@
+# Ignore the __pycache__ directory and its contents
+__pycache__/
+
+# Ignore the virtual environment folder and its contents
+idp-venv/
+
+# Optional: Ignore all system-specific and temporary Python files
+*.pyc
+*.pyo
+*.pyd
+*.log
+.DS_Store
