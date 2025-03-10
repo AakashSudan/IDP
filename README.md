@@ -40,12 +40,21 @@ venv\Scripts\activate     # For Windows
 
 ### 3️⃣ Install Dependencies
 ```sh
+<<<<<<< HEAD
 pip install fastapi uvicorn paddleocr opencv-python numpy pandas fuzzywuzzy python-Levenshtein
 ```
 
 ### 4️⃣ Run the API
 ```sh
 uvicorn main:app --reload
+=======
+pip install fastapi[all] pdf2image paddlepaddle paddleocr opencv-python numpy pandas fuzzywuzzy python-Levenshtein
+```
+
+### 4️⃣ Run the API [inside the virtual environment]
+```sh
+fastapi dev main.py
+>>>>>>> 5ac6fcd2fbe65644606a167793e198717fb801ea
 ```
 API will be accessible at: **http://127.0.0.1:8000**
 
