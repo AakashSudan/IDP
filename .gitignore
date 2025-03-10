@@ -3,6 +3,7 @@ __pycache__/
 
 # Ignore the virtual environment folder and its contents
 idp-venv/
+env/
 
 # Optional: Ignore all system-specific and temporary Python files
 *.pyc
